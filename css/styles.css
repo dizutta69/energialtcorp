@@ -22,8 +22,8 @@ body.dark{
   backdrop-filter: blur(12px);
   background: linear-gradient(
     135deg,
-    rgba(43, 107, 230, 0.85) 0%,
-    rgba(91, 125, 255, 0.85) 100%
+    rgba(43, 107, 230, 0.25) 0%,
+    rgba(91, 125, 255, 0.45) 100%
   );
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
