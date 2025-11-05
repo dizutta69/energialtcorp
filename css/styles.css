@@ -31,7 +31,7 @@ body.dark{
 
 .header-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap: wrap; gap: 15px;}
 .brand{ display:flex; align-items:center; gap:12px;}
-.logo{ width:200px; height:200px; object-fit:contain; border-radius:10px;}
+.logo{ width:200px; height:51px; object-fit:contain; border-radius:10px;}
 .brand-text h1{ margin:0; font-size:1rem; font-weight:700; letter-spacing:0.6px; color:white;}
 .tagline{ margin:0; color:rgba(255,255,255,0.9); font-size:0.85rem;}
 
