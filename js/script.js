@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ======================================================
-//  FORMULARIO DE CONTACTO (VERSIÓN CORREGIDA - SIN no-cors)
+//  FORMULARIO DE CONTACTO (VERSIÓN MEJORADA)
 // ======================================================
 
 async function handleContact(e) {
@@ -70,10 +70,8 @@ async function handleContact(e) {
   submitBtn.disabled = true;
 
   try {
-    // URL de Google Apps Script
     const scriptURL = "https://script.google.com/macros/s/AKfycbw0W9p_79UF4F1ep0pVr7Hvu7DLWCg-JyR05rnaCFlPMBfrumJelHFkw_k3X98LX2De/exec";
     
-    // ENVIAR COMO JSON (sin mode: 'no-cors')
     const response = await fetch(scriptURL, {
       method: "POST",
       headers: {
@@ -82,21 +80,19 @@ async function handleContact(e) {
       body: JSON.stringify(data)
     });
 
-    // ✅ AHORA SÍ PODEMOS LEER LA RESPUESTA
     const result = await response.json();
 
     if (result.ok) {
-      alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!");
+      alert("✅ " + result.msg);
       form.reset();
     } else {
-      alert("❌ Error: " + result.msg + "\n\nPor favor contáctanos directamente por WhatsApp.");
+      throw new Error(result.msg);
     }
 
   } catch (err) {
-    console.error("Error al conectar con el servidor:", err);
-    alert("⚠️ No se pudo conectar con el servidor. Error: " + err.message + "\n\nPor favor contáctanos directamente por WhatsApp o email.");
+    console.error("Error completo:", err);
+    alert("❌ No se pudo enviar el mensaje: " + err.message + "\n\nPor favor contáctanos directamente:\n📧 energialt.info@gmail.com\n📱 +57 350 696 0000");
   } finally {
-    // Restaurar botón
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
   }
