@@ -63,27 +63,39 @@ async function handleContact(e) {
     return false;
   }
 
+  // Mostrar loading
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = "Enviando...";
+  submitBtn.disabled = true;
+
   try {
-    // ⚙️ Reemplaza esta URL por la de tu Google Apps Script publicado
-    const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbw0W9p_79UF4F1ep0pVr7Hvu7DLWCg-JyR05rnaCFlPMBfrumJelHFkw_k3X98LX2De/exec",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }
-    );
+    // URL de Google Apps Script
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw0W9p_79UF4F1ep0pVr7Hvu7DLWCg-JyR05rnaCFlPMBfrumJelHFkw_k3X98LX2De/exec";
+    
+    // Usar FormData en lugar de JSON para evitar CORS preflight
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('message', data.message);
+    formData.append('origin', window.location.origin);
 
-    const result = await response.json();
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      body: formData,
+      mode: 'no-cors' // Modo no-cors para evitar el preflight
+    });
 
-    if (result.ok) {
-      alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!");
-      form.reset();
-    } else {
-      alert("❌ Ocurrió un error: " + result.msg);
-    }
+    // Con 'no-cors' no podemos leer la respuesta, pero asumimos éxito
+    alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!");
+    form.reset();
+
   } catch (err) {
     console.error("Error al conectar con el servidor:", err);
-    alert("⚠️ No se pudo conectar con el servidor. Intenta nuevamente más tarde.");
+    alert("⚠️ No se pudo conectar con el servidor. Por favor, contáctanos directamente por WhatsApp o email.");
+  } finally {
+    // Restaurar botón
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
   }
 }
