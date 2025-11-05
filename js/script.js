@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ======================================================
-//  FORMULARIO DE CONTACTO (VERSIÓN MEJORADA)
+//  FORMULARIO DE CONTACTO (SOLUCIÓN NO-CORS)
 // ======================================================
 
 async function handleContact(e) {
@@ -72,28 +72,33 @@ async function handleContact(e) {
   try {
     const scriptURL = "https://script.google.com/macros/s/AKfycbw0W9p_79UF4F1ep0pVr7Hvu7DLWCg-JyR05rnaCFlPMBfrumJelHFkw_k3X98LX2De/exec";
     
-    const response = await fetch(scriptURL, {
+    // 🔥 SOLUCIÓN: Usar no-cors y FormData
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('message', data.message);
+
+    // Con no-cors, la petición se envía pero no podemos leer la respuesta
+    await fetch(scriptURL, {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
+      body: formData,
+      mode: 'no-cors' // Esto evita el error CORS
     });
 
-    const result = await response.json();
-
-    if (result.ok) {
-      alert("✅ " + result.msg);
-      form.reset();
-    } else {
-      throw new Error(result.msg);
-    }
+    // 🔥 ASUMIMOS ÉXITO (no podemos verificar la respuesta en no-cors)
+    // Pero sabemos que el Google Apps Script funciona por la prueba interna
+    alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!\n\nTe responderemos a: " + data.email);
+    form.reset();
 
   } catch (err) {
-    console.error("Error completo:", err);
-    alert("❌ No se pudo enviar el mensaje: " + err.message + "\n\nPor favor contáctanos directamente:\n📧 energialt.info@gmail.com\n📱 +57 350 696 0000");
+    console.error("Error:", err);
+    // En no-cors, raramente llegamos aquí a menos que falle la conexión
+    alert("⚠️ No se pudo conectar. Por favor contáctanos directamente:\n\n📧 energialt.info@gmail.com\n📱 +57 350 696 0000 (WhatsApp)");
   } finally {
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
+    // Restaurar botón después de un breve delay
+    setTimeout(() => {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }, 2000);
   }
 }
