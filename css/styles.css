@@ -15,7 +15,7 @@ body.dark{
 .site-header{ padding:18px 0; position:sticky; top:0; z-index:40; backdrop-filter: blur(4px);}
 .header-inner{ display:flex; align-items:center; justify-content:space-between;}
 .brand{ display:flex; align-items:center; gap:12px;}
-.logo{ width:56px; height:56px; object-fit:contain; border-radius:8px;}
+.logo{ width:200px; height:200px; object-fit:contain; border-radius:12px;}
 .brand-text h1{ margin:0; font-size:1rem; font-weight:700; letter-spacing:0.6px;}
 .tagline{ margin:0; color:var(--muted); font-size:0.85rem;}
 
