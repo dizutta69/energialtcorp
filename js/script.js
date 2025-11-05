@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ======================================================
-//  FORMULARIO DE CONTACTO (ENVÍO REAL A GOOGLE APPS SCRIPT)
+//  FORMULARIO DE CONTACTO (VERSIÓN CORREGIDA - SIN no-cors)
 // ======================================================
 
 async function handleContact(e) {
@@ -73,26 +73,28 @@ async function handleContact(e) {
     // URL de Google Apps Script
     const scriptURL = "https://script.google.com/macros/s/AKfycbw0W9p_79UF4F1ep0pVr7Hvu7DLWCg-JyR05rnaCFlPMBfrumJelHFkw_k3X98LX2De/exec";
     
-    // Usar FormData en lugar de JSON para evitar CORS preflight
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('email', data.email);
-    formData.append('message', data.message);
-    formData.append('origin', window.location.origin);
-
+    // ENVIAR COMO JSON (sin mode: 'no-cors')
     const response = await fetch(scriptURL, {
       method: "POST",
-      body: formData,
-      mode: 'no-cors' // Modo no-cors para evitar el preflight
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
     });
 
-    // Con 'no-cors' no podemos leer la respuesta, pero asumimos éxito
-    alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!");
-    form.reset();
+    // ✅ AHORA SÍ PODEMOS LEER LA RESPUESTA
+    const result = await response.json();
+
+    if (result.ok) {
+      alert("✅ Tu mensaje fue enviado correctamente. ¡Gracias por contactarnos!");
+      form.reset();
+    } else {
+      alert("❌ Error: " + result.msg + "\n\nPor favor contáctanos directamente por WhatsApp.");
+    }
 
   } catch (err) {
     console.error("Error al conectar con el servidor:", err);
-    alert("⚠️ No se pudo conectar con el servidor. Por favor, contáctanos directamente por WhatsApp o email.");
+    alert("⚠️ No se pudo conectar con el servidor. Error: " + err.message + "\n\nPor favor contáctanos directamente por WhatsApp o email.");
   } finally {
     // Restaurar botón
     submitBtn.textContent = originalText;
