@@ -19,13 +19,13 @@ body.dark{
   position:sticky; 
   top:0; 
   z-index:40; 
-  backdrop-filter: blur(10px);
-  background: rgba(43, 107, 230, 0.9); /* AZUL ENERGIALT */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  background: rgba(43, 107, 230, 0.85); /* AZUL ENERGIALT */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .header-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap: wrap; gap: 15px;}
 .brand{ display:flex; align-items:center; gap:12px;}
-.logo{ width:80px; height:80px; object-fit:contain; border-radius:10px;}
+.logo{ width:200px; height:200px; object-fit:contain; border-radius:10px;}
 .brand-text h1{ margin:0; font-size:1rem; font-weight:700; letter-spacing:0.6px; color:white;}
 .tagline{ margin:0; color:rgba(255,255,255,0.9); font-size:0.85rem;}
 
